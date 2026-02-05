@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS解密工具</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        textarea {
+            width: 100%;
+            height: 300px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+            resize: vertical;
+        }
+        button {
+            margin: 10px 5px 0 0;
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #output {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>JS解密工具</h1>
+        <h2>输入加密的JS代码：</h2>
+        <textarea id="input" placeholder="请粘贴加密的JS代码..."></textarea>
+        <br>
+        <button onclick="decrypt()">解密</button>
+        <h2>解密结果：</h2>
+        <div id="output"></div>
+    </div>
+
+    <script>
+        function decrypt() {
+            const input = document.getElementById('input').value;
+            const output = document.getElementById('output');
+            
+            try {
+                // 尝试直接执行代码，获取解密后的内容
+                eval(input);
+                
+                // 检查是否有全局变量存储了弹窗内容
+                if (window.popupMessages || window.messages) {
+                    const messages = window.popupMessages || window.messages;
+                    output.textContent = '弹窗内容数组：\n' + JSON.stringify(messages, null, 2);
+                } else {
+                    output.textContent = '解密成功，但未找到弹窗内容数组。\n请检查控制台输出获取更多信息。';
+                    console.log('解密后的全局变量：', window);
+                }
+            } catch (error) {
+                output.textContent = '解密失败：' + error.message;
+                console.error('解密错误：', error);
+            }
+        }
+    </script>
+</body>
+</html>
